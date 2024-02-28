@@ -1,0 +1,18 @@
+@import '../../css/variables.css';
+
+header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-color-dark);
+    height: fit-content;
+    padding: 16px 48px 16px 48px;
+}
+
+.fav-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+}

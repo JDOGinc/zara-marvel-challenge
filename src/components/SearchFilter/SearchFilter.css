@@ -1,0 +1,36 @@
+@import '../../css/variables.css';
+
+.search-wrapper {
+    width: 100%;
+    padding: 12px 48px 12px 48px;
+    gap: 12px
+}
+
+.search-input {
+    display: flex;
+    border-bottom: 1px solid var(--bg-color-dark);
+    padding: 0px 0px 8px 0px;
+    gap: 12px;
+    font-weight: 400;
+}
+
+.search-wrapper label {
+    float: left;
+}
+
+.search-wrapper input {
+    width: 100%;
+    border-style: none;
+    font-size: 16px;
+    line-height: 18.75px;
+
+}
+
+.search-wrapper input:focus {
+    outline: none;
+}
+
+#items-result {
+    font-size: 12px;
+    line-height: 14.06px;
+}
