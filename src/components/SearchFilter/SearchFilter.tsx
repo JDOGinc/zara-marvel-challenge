@@ -1,13 +1,21 @@
 import './SearchFilter.css';
-import searchIcon from '../../assets/Like button.svg';
+import searchIcon from '../../assets/likeButton.svg';
+import { useFilter } from '../../context/filterContext';
 function SearchFilter() {
+    const { filteredCharacters, filterCharacters } = useFilter();
+    const handleChange = (e: any) => {
+        filterCharacters(e.target.value);
+    }
+
+    const itemsResult = filteredCharacters.length;
+
     return (
         <section className='search-wrapper'>
             <div className='search-input'>
                 <label htmlFor="search"><img src={searchIcon} alt="" /></label>
-                <input id="search" type="text" placeholder="SEARCH CHARACTER..." />
+                <input id="search" type="text" placeholder="SEARCH CHARACTER..." onChange={handleChange} />
             </div>
-            <span id='items-result'>50 RESULTS</span>
+            <span id='items-result'>{itemsResult === 1 ? `${itemsResult} RESULT` : `${itemsResult} RESULTS`}</span>
         </section>
     );
 }
