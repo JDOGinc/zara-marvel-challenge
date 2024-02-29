@@ -2,12 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
-import { FilterProvider } from './context/filterContext.tsx'
+import { CharacterProvider } from './context/characterContext.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <FilterProvider>
+    <CharacterProvider>
       <App />
-    </FilterProvider>
+    </CharacterProvider>
   </React.StrictMode>,
 )

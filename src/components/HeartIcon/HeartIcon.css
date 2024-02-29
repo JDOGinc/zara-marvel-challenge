@@ -1,0 +1,9 @@
+@import '../../css/variables.css';
+
+.fav-icon.default {
+    fill: var(--marvel-red);
+}
+
+.fav-icon.unselected {
+    fill: var(--bg-color-light);
+}

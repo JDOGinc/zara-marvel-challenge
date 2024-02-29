@@ -36,10 +36,28 @@
 .character-info .fav-icon {
     width: 12px;
     height: 10.8px;
-    stroke: var(--bg-color-light);
     stroke-width: 1.5px;
-    z-index: 2;
     cursor: pointer;
+}
+
+.character-info .fav-icon.unselected {
+    stroke: var(--bg-color-light);
+}
+
+.character-info .fav-icon.default {
+    stroke: var(--marvel-red);
+}
+
+.character-card:hover .fav-icon.default {
+    stroke: var(--bg-color-light);
+    fill: var(--bg-color-light);
+}
+
+.character-info button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 2;
 }
 
 .character-info span {

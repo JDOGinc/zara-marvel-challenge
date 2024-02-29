@@ -1,5 +1,5 @@
 import Header from "./components/Header/Header"
-import Main from "./pages/Main/Main"
+import Home from "./pages/Home/Home"
 
 
 function App() {
@@ -7,7 +7,7 @@ function App() {
     <div className="App">
 
       <Header></Header>
-      <Main></Main>
+      <Home></Home>
     </ div>
 
   )

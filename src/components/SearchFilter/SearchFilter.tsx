@@ -1,8 +1,8 @@
 import './SearchFilter.css';
 import searchIcon from '../../assets/likeButton.svg';
-import { useFilter } from '../../context/filterContext';
+import { useCharacterContext } from '../../context/characterContext';
 function SearchFilter() {
-    const { filteredCharacters, filterCharacters } = useFilter();
+    const { filteredCharacters, filterCharacters } = useCharacterContext();
     const handleChange = (e: any) => {
         filterCharacters(e.target.value);
     }
