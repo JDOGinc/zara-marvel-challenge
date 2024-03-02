@@ -1,14 +1,16 @@
 import CharacterCard from '../CharacterCard/CharacterCard';
 import './MainList.css';
 import { useCharacterContext } from '../../context/characterContext';
-
+import { Character } from '../../types/character';
 function MainList() {
 
-    const { filteredCharacters } = useCharacterContext();
+    const { characters, isLoading } = useCharacterContext();
+
+
 
     return (
         <ul className='characters-list'>
-            {filteredCharacters.map((character: any) => (
+            {isLoading && characters.map((character: Character) => (
                 <CharacterCard
                     key={character.id}
                     id={character.id}

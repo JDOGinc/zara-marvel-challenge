@@ -10,11 +10,16 @@ header {
     padding: 16px 48px 16px 48px;
 }
 
+header img {
+    cursor: pointer;
+}
+
 .fav-container {
     display: flex;
     gap: 8px;
     padding: 8px;
     color: var(--bg-color-light);
+    cursor: pointer;
 
 }
 

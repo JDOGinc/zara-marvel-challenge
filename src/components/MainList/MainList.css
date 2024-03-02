@@ -2,11 +2,6 @@
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(172.5px, 1fr));
-    padding: 0px 48px 0px 48px;
+    padding: var(--standard-content-padding);
     gap: 16px
-}
-
-.prueba {
-    background-color: red;
-    height: 245.97px;
 }

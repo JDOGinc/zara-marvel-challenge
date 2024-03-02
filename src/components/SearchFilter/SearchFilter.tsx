@@ -1,13 +1,25 @@
 import './SearchFilter.css';
 import searchIcon from '../../assets/likeButton.svg';
 import { useCharacterContext } from '../../context/characterContext';
+import { useState, useEffect } from 'react';
+
 function SearchFilter() {
-    const { filteredCharacters, filterCharacters } = useCharacterContext();
-    const handleChange = (e: any) => {
-        filterCharacters(e.target.value);
+    const { characters, setFilter } = useCharacterContext();
+    const [inputValue, setInputValue] = useState('' as string);
+
+    useEffect(() => {
+        const timerId = setTimeout(() => {
+            setFilter(inputValue);
+        }, 500);
+        return () => clearTimeout(timerId);
+    }, [inputValue, setFilter]);
+
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputValue(e.target.value);
     }
 
-    const itemsResult = filteredCharacters.length;
+    const itemsResult = characters.length;
 
     return (
         <section className='search-wrapper'>

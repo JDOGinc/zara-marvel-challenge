@@ -2,5 +2,9 @@
     --bg-color-light: #FFFFFF;
     --bg-color-dark: #000000;
     --marvel-red: #EC1D24;
+    --standard-wrapper-padding: 48px 0px 48px 0px;
+    --mobile-wrapper-padding: 24px 0px 24px 0px;
+    --standard-content-padding: 0px 48px 0px 48px;
+    --mobile-content-padding: 0px 16px 0px 16px;
 
 }
