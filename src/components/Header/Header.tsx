@@ -6,11 +6,12 @@ import { Outlet } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 function Header() {
-    const { favoriteCharacters, setFavoriteMode } = useCharacterContext();
+    const { favoriteList, setFavoriteMode } = useCharacterContext();
     const navigate = useNavigate();
-    const favCharacters: number = favoriteCharacters?.length || 0;
+    const favCharacters: number = favoriteList?.length || 0;
 
     const toggleFavoriteMode = (isFavorite: boolean) => {
+        console.log('toggleFavoriteMode');
         setFavoriteMode(isFavorite);
         if (window.location.pathname !== '/') {
             navigate('/');

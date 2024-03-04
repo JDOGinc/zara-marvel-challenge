@@ -1,125 +1,124 @@
-import { ReactNode, createContext, useContext, useEffect, useMemo, useRef } from 'react';
+import { ReactNode, createContext, useContext, useEffect, useMemo } from 'react';
 import { useState, useCallback } from 'react';
 import { Character } from '../types/character';
-import { getCharacters, getCharactersByName } from '../services/characterService';
+import { getCharacters } from '../services/characterService';
 
 interface CharacterContextType {
-    characters: Character[];
-    setCharacters: React.Dispatch<React.SetStateAction<Character[]>>;
+    charactersList: Character[];
+    setCharactersList: React.Dispatch<React.SetStateAction<Character[]>>;
+    favoriteList: Character[];
+    setFavoriteList: React.Dispatch<React.SetStateAction<Character[]>>;
+    favoriteListFiltered: Character[];
+    setFavoriteListFiltered: React.Dispatch<React.SetStateAction<Character[]>>;
     favoriteMode: boolean;
     setFavoriteMode: React.Dispatch<React.SetStateAction<boolean>>;
-    setFilter: React.Dispatch<React.SetStateAction<string>>;
-    handleFavorite: (id: number) => void;
-    favoriteCharacters: Character[];
+    isLoading: boolean;
+    fetchCharacters: (query: string) => Character[] | Promise<Character[]>;
+    filterFavorites: (query: string) => void;
+    filterCharacters: (query: string) => void;
+    getCharacter: (id: number) => Character | undefined;
 }
 
 export const characterContext = createContext<CharacterContextType>({
-    characters: [],
-    setCharacters: () => { },
+    charactersList: [],
+    setCharactersList: () => { },
+    favoriteList: [],
+    setFavoriteList: () => { },
+    favoriteListFiltered: [],
+    setFavoriteListFiltered: () => { },
     favoriteMode: false,
     setFavoriteMode: () => { },
-    setFilter: () => { },
-    handleFavorite: () => { },
-    favoriteCharacters: []
+    isLoading: false,
+    fetchCharacters: () => [],
+    filterFavorites: () => { },
+    filterCharacters: () => { },
+    getCharacter: () => undefined
 });
 
 export const CharacterProvider = ({ children }: { children: ReactNode }) => {
-    const [filter, setFilter] = useState('' as string);
-    const [characters, setCharacters] = useState<Character[]>([]);
-    const [favoriteCharacters, setFavoriteCharacters] = useState<Character[]>([]);
+    const [charactersList, setCharactersList] = useState<Character[]>([]);
+    const [favoriteList, setFavoriteList] = useState<Character[]>([]);
+    const [favoriteListFiltered, setFavoriteListFiltered] = useState<Character[]>([]);
     const [favoriteMode, setFavoriteMode] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
-
-    const isFavoriteCharacters = useCallback((id: number) => {
-        return favoriteCharacters.some((character) => character.id === id);
-    }, [favoriteCharacters]);
-
-    const fetchAllCharacters = useCallback(() => {
-        getCharacters(50).then((res) => {
-            const characterData = res.data.results.map((character: any) => ({
-                id: character.id,
-                name: character.name,
-                imageUrl: `${character.thumbnail.path}.${character.thumbnail.extension}`,
-                isFavorite: isFavoriteCharacters(character.id)
-            }));
-            setCharacters(characterData);
-        });
-    }, [isFavoriteCharacters]);
-
-    const filterFavoriteCharacters = useCallback((query: string) => {
-        const filteredCharacters = favoriteCharacters.filter((character) => character.name.toLowerCase().includes(query.toLowerCase()));
-        setCharacters(filteredCharacters);
-    }, [favoriteCharacters]);
-
-    const fetchFilterCharacters = useCallback((query: string) => {
-        getCharactersByName(50, query).then((res) => {
-            const characterData = res.data.results.map((character: any) => ({
-                id: character.id,
-                name: character.name,
-                imageUrl: `${character.thumbnail.path}.${character.thumbnail.extension}`,
-                isFavorite: isFavoriteCharacters(character.id)
-            }));
-            setCharacters(characterData);
-        });
-    }, [isFavoriteCharacters]);
+    const fetchCharacters = useCallback(async (query: string) => {
+        console.log('fetchCharacters');
+        setIsLoading(true);
+        try {
+            const res = await getCharacters(50, query);
+            const characterData = res.data.results.map((character: any) => {
+                return {
+                    id: character.id,
+                    name: character.name,
+                    description: character.description,
+                    imageUrl: `${character.thumbnail.path}.${character.thumbnail.extension}`,
+                    isFavorite: false
+                };
+            });
+            setIsLoading(false);
+            return characterData;
+        } catch (error) {
+            setIsLoading(false);
+            console.error(error);
+            return [];
+        }
+    }, []);
 
     useEffect(() => {
-        if (favoriteMode) {
-            if (filter === '') {
-                setCharacters(favoriteCharacters);
-            } else {
-                filterFavoriteCharacters(filter);
-            }
+        console.log('useEffect characterContext fetchCharacters');
+        const loadData = async () => {
+            const charactersData = await fetchCharacters('');
+            setCharactersList(charactersData);
+        };
 
+        loadData();
+    }, [fetchCharacters]);
+
+
+    const filterFavorites = useCallback((query: string) => {
+        console.log('filterFavorites');
+        if (query === '') {
+            setFavoriteListFiltered(favoriteList);
+            return;
         } else {
-            if (filter === '') {
-                fetchAllCharacters();
-            } else {
-                fetchFilterCharacters(filter);
-            }
-        }
-
-    }, [filter, fetchAllCharacters, fetchFilterCharacters, favoriteMode, filterFavoriteCharacters, favoriteCharacters]);
-
-
-
-    //funcion que se encarga de ir almacenando solo los personajes favoritos en favoriteCharacters, si ya existe el personaje en favoriteCharacters, lo elimina
-    const handleFavorite = useCallback((id: number) => {
-
-        if (favoriteMode) {
-            setFavoriteCharacters(favoriteCharacters.filter((character) => character.id !== id));
-            const updatedCharacters: Character[] = characters.map((character: Character) => {
-                if (character.id === id) {
-                    return { ...character, isFavorite: !character.isFavorite };
-                }
-                return character;
+            const filteredList = favoriteList.filter((character) => {
+                return character.name.toLowerCase().includes(query.toLowerCase());
             });
-            setCharacters(updatedCharacters);
-        } else {
-            //busca el personaje en characters
-            const character = characters.find((character) => character.id === id);
-
-            //si el personaje ya esta en favoriteCharacters, lo elimina
-            if (favoriteCharacters.some((character) => character.id === id)) {
-                setFavoriteCharacters(favoriteCharacters.filter((character) => character.id !== id));
-            } else {
-                //si el personaje no esta en favoriteCharacters, lo agrega con el valor de isFavorite en true
-                setFavoriteCharacters([...favoriteCharacters, { ...character, isFavorite: true }]);
-            }
-            const updatedCharacters: Character[] = characters.map((character: Character) => {
-                if (character.id === id) {
-                    return { ...character, isFavorite: !character.isFavorite };
-                }
-                return character;
-            });
-            setCharacters(updatedCharacters);
+            setFavoriteListFiltered(filteredList);
         }
+    }, [favoriteList]);
 
+    const filterCharacters = useCallback((query: string) => {
+        console.log('filterCharacters');
+        const loadData = async () => {
+            const charactersData = await fetchCharacters(query);
+            setCharactersList(charactersData);
+        };
 
+        loadData();
+    }, [fetchCharacters, setCharactersList]);
 
-    }, [characters, favoriteCharacters, favoriteMode]);
+    const getCharacter = useCallback((id: number) => {
+        console.log('getCharacter');
+        return charactersList.find(character => character.id === id);
+    }, [charactersList]);
 
-    const value = useMemo(() => ({ characters, setCharacters, favoriteMode, setFavoriteMode, setFilter, handleFavorite, favoriteCharacters }), [characters, favoriteMode, handleFavorite, favoriteCharacters]);
+    const value = useMemo(() => ({
+        charactersList,
+        setCharactersList,
+        favoriteListFiltered,
+        setFavoriteListFiltered,
+        favoriteMode,
+        setFavoriteMode,
+        favoriteList,
+        setFavoriteList,
+        isLoading,
+        fetchCharacters,
+        filterFavorites,
+        filterCharacters,
+        getCharacter
+    }), [charactersList, favoriteMode, favoriteList, isLoading, fetchCharacters, favoriteListFiltered, filterFavorites, filterCharacters, getCharacter]);
 
     return (
         <characterContext.Provider value={value}>

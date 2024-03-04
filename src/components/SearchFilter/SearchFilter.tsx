@@ -1,25 +1,32 @@
 import './SearchFilter.css';
 import searchIcon from '../../assets/likeButton.svg';
 import { useCharacterContext } from '../../context/characterContext';
-import { useState, useEffect } from 'react';
+import { useRef } from 'react';
 
 function SearchFilter() {
-    const { characters, setFilter } = useCharacterContext();
-    const [inputValue, setInputValue] = useState('' as string);
+    const { charactersList, favoriteListFiltered, favoriteMode, filterCharacters, filterFavorites } = useCharacterContext();
 
-    useEffect(() => {
-        const timerId = setTimeout(() => {
-            setFilter(inputValue);
-        }, 500);
-        return () => clearTimeout(timerId);
-    }, [inputValue, setFilter]);
+    const debounceTimer = useRef<number>();
+
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputValue(e.target.value);
+        console.log('handleChange searchFilter');
+        const value = e.target.value;
+
+        if (debounceTimer.current) {
+            clearTimeout(debounceTimer.current);
+        }
+        debounceTimer.current = setTimeout(() => {
+            if (favoriteMode) {
+                filterFavorites(value);
+            } else {
+                filterCharacters(value);
+            }
+        }, 500)
     }
 
-    const itemsResult = characters.length;
+    const itemsResult = favoriteMode ? favoriteListFiltered.length : charactersList.length;
 
     return (
         <section className='search-wrapper'>

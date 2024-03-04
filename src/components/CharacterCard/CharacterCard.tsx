@@ -1,7 +1,7 @@
 import HeartIcon from '../HeartIcon/HeartIcon';
 import './CharacterCard.css';
-import { useCharacterContext } from '../../context/characterContext';
 import { NavLink } from 'react-router-dom';
+import useFavorite from '../../hooks/useFavorite';
 
 
 interface CharacterCardProps {
@@ -13,11 +13,7 @@ interface CharacterCardProps {
 
 function CharacterCard({ id, name, image, isFavorite }: CharacterCardProps) {
 
-    const { handleFavorite } = useCharacterContext();
-
-    const handleFavoriteCharacter = () => {
-        handleFavorite(id);
-    };
+    const { toggleFavorite } = useFavorite();
 
     return (
         <article className="character-card">
@@ -27,7 +23,7 @@ function CharacterCard({ id, name, image, isFavorite }: CharacterCardProps) {
             <div className='character-info'>
                 <div className='highlight-box'></div>
                 <span>{name}</span>
-                <button onClick={handleFavoriteCharacter}><HeartIcon isDefault={isFavorite} /></button>
+                <button onClick={() => toggleFavorite(id)}><HeartIcon isDefault={isFavorite} /></button>
             </div>
         </article>
     )
