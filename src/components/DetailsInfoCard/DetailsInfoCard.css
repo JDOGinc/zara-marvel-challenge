@@ -1,0 +1,121 @@
+@import '../../css/variables.css';
+
+.character-resume {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    background-color: var(--bg-color-dark);
+    width: 100%;
+    color: var(--bg-color-light);
+    align-items: center;
+    padding: var(--details-info-horizontal-padding);
+}
+
+.character-resume-content {
+    display: flex;
+    flex-direction: row;
+    max-width: 960px;
+    width: 100%;
+}
+
+.character-resume-image {
+    background-color: beige;
+    width: 320px;
+    height: 320px;
+}
+
+.character-resume-info {
+    max-width: 640px;
+    max-height: 320px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 24px;
+    padding: 48px 0px 48px 48px
+}
+
+.character-resume::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-bottom: 24px solid var(--bg-color-light);
+    border-left: 24px solid transparent;
+}
+
+.character-resume-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.character-resume-title svg {
+    width: 24px;
+    height: 21.68px;
+    fill: var(--bg-color-light);
+}
+
+.character-resume-title h1 {
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 46.88px;
+}
+
+.character-description {
+    width: 100%;
+    max-width: 592px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19px;
+    letter-spacing: 0em;
+    text-align: left;
+}
+
+.character-resume-title button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 2;
+}
+
+@media (min-width: 767px) {
+    body:has(.character-resume) header {
+        border-bottom: 1px solid #333333;
+    }
+
+    .character-resume-info {
+        padding: 48px;
+    }
+
+
+}
+
+@media (max-width: 425px) {
+    .character-resume-image {
+        background-color: beige;
+        width: 100%;
+        height: 100%;
+    }
+
+    .character-resume-content {
+        flex-direction: column;
+    }
+
+    .character-resume-info {
+        padding: 24px 16px 48px 16px;
+    }
+}
+
+@media (min-width: 767px),
+(max-width: 425px) {
+    .character-resume-info h1 {
+        font-size: 32px;
+        line-height: 37.5px;
+    }
+
+    .character-descriptio {
+        line-height: 18.75px;
+    }
+}

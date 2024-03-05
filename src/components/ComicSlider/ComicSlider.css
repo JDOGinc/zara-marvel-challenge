@@ -1,0 +1,40 @@
+@import '../../css/variables.css';
+
+.comics-content h2 {
+    width: 100%;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 38px;
+    letter-spacing: 0em;
+    text-align: left;
+    padding: var(--details-comics-horizontal-padding);
+}
+
+.comics-list {
+    width: 100%;
+    gap: 16px;
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    padding: var(--details-comics-horizontal-padding);
+    padding-bottom: 24px;
+}
+
+.comics-list::-webkit-scrollbar {
+    height: 4px;
+}
+
+.comics-list::-webkit-scrollbar-thumb {
+    background: var(--marvel-red);
+}
+
+.comics-list::-webkit-scrollbar-track {
+    background: var(--bg-scroll-color);
+}
+
+@media (min-width: 767px),
+(max-width: 425px) {
+    .comics-list::-webkit-scrollbar {
+        display: none;
+    }
+}

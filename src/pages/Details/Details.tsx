@@ -1,85 +1,53 @@
-import HeartIcon from '../../components/HeartIcon/HeartIcon';
-import './Details.css'
-import ComicCard from '../../components/ComicCard/ComicCard';
-import { useEffect, useState } from 'react';
-import { getComicsByCharacter } from '../../services/characterService';
-import { useParams } from 'react-router-dom';
-import { useCharacterContext } from '../../context/characterContext';
-import { Character } from '../../types/character';
-import { Comic } from '../../types/character';
-import useFavorite from '../../hooks/useFavorite';
 
+import './Details.css';
+import { useParams } from 'react-router-dom';
+import ComicSlider from '../../components/ComicSlider/ComicSlider';
+import { useCharacterContext } from '../../context/characterContext';
+import { useEffect, useState } from 'react';
+import { Character } from '../../types/character';
+import useFavorite from '../../hooks/useFavorite';
+import DetailsInfoCard from '../../components/DetailsInfoCard/DetailsInfoCard';
+import useFetchCharacters from '../../hooks/useFetchCharacters';
 
 function Details() {
     const { id } = useParams();
-    const { getCharacter } = useCharacterContext();
-    const [character, setCharacter] = useState<Character | undefined>(undefined);
-    const [comics, setComics] = useState([] as Comic[]);
+    const [character, setCharacter] = useState<Character | undefined>();
+    const [isLoading, setIsLoading] = useState(true);
+    const { charactersList, favoriteList } = useCharacterContext();
+    const { fetchCharacterById } = useFetchCharacters();
+
     const { toggleFavorite } = useFavorite();
 
-
     useEffect(() => {
-        if (id !== undefined) {
-            const characterDetail: Character | undefined = getCharacter(parseInt(id));
-            if (characterDetail !== undefined) {
-                getComicsByCharacter(id).then((res) => {
-                    const comicsData: Comic[] = res.data.results.map((comic) => ({
-                        id: comic.id,
-                        title: comic.title,
-                        imageUrl: `${comic.thumbnail.path}.${comic.thumbnail.extension}`,
-                        year: getYearOfOnsaleDate(comic.dates[0].date)
-                    }));
-                    setComics(comicsData);
-                })
-
-                setCharacter(characterDetail);
-            } else {
-                setCharacter(undefined);
-            }
+        if (id === undefined) return;
+        const characterData = charactersList.find(char => char.id === Number(id));
+        if (characterData === undefined && charactersList.length > 0) {
+            const fetchData = async () => {
+                const characterData = await fetchCharacterById(Number(id));
+                if (characterData && favoriteList.some(fav => fav.id === characterData.id)) {
+                    characterData.isFavorite = true;
+                }
+                setCharacter(characterData);
+            };
+            fetchData();
+        } else {
+            setCharacter(characterData);
         }
-    }, [id, getCharacter])
 
-    const getYearOfOnsaleDate = (date: string) => {
-        const onsaleDate = new Date(date);
-        return onsaleDate.getFullYear().toString();
-    }
+    }, [id, charactersList, fetchCharacterById, favoriteList]);
 
-    if (!character) {
+
+    if (id === undefined || character === undefined) {
         return null
     } else {
         return (
             <>
-
-                <div className='character-resume'>
-                    <div className='character-resume-content'>
-                        <img src={character.imageUrl} alt={character.name} className='character-resume-image' />
-                        <div className='character-resume-info'>
-                            <div className='character-resume-title'>
-                                <h1>{character.name}</h1>
-                                <button onClick={() => toggleFavorite(character.id)}><HeartIcon isDefault={character.isFavorite} /></button>
-                            </div>
-                            <p className='character-description'>
-                                {character.description === '' ? 'No description available' : character.description}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div className='character-comics'>
+                {!isLoading && <DetailsInfoCard character={character} toggleFavorite={toggleFavorite} />}
+                <section className='character-comics'>
                     <div className='comics-content'>
-                        <h2>COMICS</h2>
-                        <ul className='comics-list'>
-                            {comics.map((comic: Comic) => (
-                                <ComicCard
-                                    key={comic.id}
-                                    id={comic.id}
-                                    title={comic.title}
-                                    imageUrl={comic.imageUrl}
-                                    year={comic.year}
-                                />
-                            ))}
-                        </ul>
+                        <ComicSlider id={id} setIsLoading={setIsLoading}></ComicSlider>
                     </div>
-                </div>
+                </section>
             </>
         )
 

@@ -7,7 +7,7 @@ header {
     align-items: center;
     background-color: var(--bg-color-dark);
     height: fit-content;
-    padding: 16px 48px 16px 48px;
+    padding: var(--header-padding)
 }
 
 header img {

@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useContext, useEffect, useMemo } from 'react';
 import { useState, useCallback } from 'react';
 import { Character } from '../types/character';
-import { getCharacters } from '../services/characterService';
+import useFetchCharacters from '../hooks/useFetchCharacters';
 
 interface CharacterContextType {
     charactersList: Character[];
@@ -41,39 +41,21 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
     const [favoriteListFiltered, setFavoriteListFiltered] = useState<Character[]>([]);
     const [favoriteMode, setFavoriteMode] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-
-    const fetchCharacters = useCallback(async (query: string) => {
-        console.log('fetchCharacters');
-        setIsLoading(true);
-        try {
-            const res = await getCharacters(50, query);
-            const characterData = res.data.results.map((character: any) => {
-                return {
-                    id: character.id,
-                    name: character.name,
-                    description: character.description,
-                    imageUrl: `${character.thumbnail.path}.${character.thumbnail.extension}`,
-                    isFavorite: false
-                };
-            });
-            setIsLoading(false);
-            return characterData;
-        } catch (error) {
-            setIsLoading(false);
-            console.error(error);
-            return [];
-        }
-    }, []);
+    const { fetchCharacters } = useFetchCharacters();
 
     useEffect(() => {
         console.log('useEffect characterContext fetchCharacters');
         const loadData = async () => {
+            setIsLoading(true);
             const charactersData = await fetchCharacters('');
+            setIsLoading(false);
             setCharactersList(charactersData);
         };
 
         loadData();
     }, [fetchCharacters]);
+
+
 
 
     const filterFavorites = useCallback((query: string) => {

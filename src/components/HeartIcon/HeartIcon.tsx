@@ -1,7 +1,7 @@
 import './HeartIcon.css';
 
 interface HeartIconProps {
-    isDefault: boolean;
+    isDefault: boolean | undefined;
 }
 
 function HeartIcon({ isDefault }: HeartIconProps) {

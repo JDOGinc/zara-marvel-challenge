@@ -2,6 +2,6 @@
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(172.5px, 1fr));
-    padding: var(--standard-content-padding);
+    padding: var(--standard-horizontal-padding);
     gap: 16px
 }

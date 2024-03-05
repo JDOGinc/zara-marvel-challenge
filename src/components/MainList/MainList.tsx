@@ -36,7 +36,8 @@ function MainList() {
                     key={character.id}
                     id={character.id}
                     name={character.name}
-                    image={character.imageUrl}
+                    description={character.description}
+                    imageUrl={character.imageUrl}
                     isFavorite={character.isFavorite}
                 />
             ))}

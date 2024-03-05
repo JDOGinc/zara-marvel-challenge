@@ -2,28 +2,21 @@ import HeartIcon from '../HeartIcon/HeartIcon';
 import './CharacterCard.css';
 import { NavLink } from 'react-router-dom';
 import useFavorite from '../../hooks/useFavorite';
+import { Character } from '../../types/character';
 
-
-interface CharacterCardProps {
-    id: number;
-    name: string;
-    image: string;
-    isFavorite: boolean;
-}
-
-function CharacterCard({ id, name, image, isFavorite }: CharacterCardProps) {
+function CharacterCard(character: Character) {
 
     const { toggleFavorite } = useFavorite();
 
     return (
         <article className="character-card">
-            <NavLink className="character-card-image" to={`/character/${id}`}>
-                <img src={image} alt={name} />
+            <NavLink className="character-card-image" to={`/character/${character.id}`} state={character}>
+                <img src={character.imageUrl} alt={character.name} />
             </NavLink>
             <div className='character-info'>
                 <div className='highlight-box'></div>
-                <span>{name}</span>
-                <button onClick={() => toggleFavorite(id)}><HeartIcon isDefault={isFavorite} /></button>
+                <span>{character.name}</span>
+                <button onClick={() => toggleFavorite(character.id)}><HeartIcon isDefault={character.isFavorite} /></button>
             </div>
         </article>
     )
