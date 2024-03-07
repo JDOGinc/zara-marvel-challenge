@@ -92,7 +92,7 @@
 
 }
 
-@media (max-width: 425px) {
+@media (max-width: 426px) {
     .character-resume-image {
         background-color: beige;
         width: 100%;
@@ -109,7 +109,7 @@
 }
 
 @media (min-width: 767px),
-(max-width: 425px) {
+(max-width: 426px) {
     .character-resume-info h1 {
         font-size: 32px;
         line-height: 37.5px;

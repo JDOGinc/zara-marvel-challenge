@@ -32,8 +32,8 @@
     background: var(--bg-scroll-color);
 }
 
-@media (min-width: 767px),
-(max-width: 425px) {
+@media (max-width: 769px),
+(max-width: 426px) {
     .comics-list::-webkit-scrollbar {
         display: none;
     }

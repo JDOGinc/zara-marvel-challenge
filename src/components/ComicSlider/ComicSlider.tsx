@@ -28,31 +28,34 @@ function ComicSlider({ id, setIsLoading }: ComicSliderProps) {
     return <></>
   } else {
     return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{
-          delay: 1,
-          type: 'spring',
-          mass: 1,
-          stiffness: 80,
-          damping: 20,
-        }}
-      >
-        <h2>COMICS</h2>
-        <ul className="comics-list">
-          {comics.map((comic: Comic) => (
-            <ComicCard
-              key={comic.id}
-              id={comic.id}
-              title={comic.title}
-              imageUrl={comic.imageUrl}
-              year={comic.year}
-            />
-          ))}
-        </ul>
-      </motion.div>
+      <section className="character-comics">
+        <motion.div
+          className="comics-content"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{
+            delay: 1,
+            type: 'spring',
+            mass: 1,
+            stiffness: 80,
+            damping: 20,
+          }}
+        >
+          <h2>COMICS</h2>
+          <ul className="comics-list">
+            {comics.map((comic: Comic) => (
+              <ComicCard
+                key={comic.id}
+                id={comic.id}
+                title={comic.title}
+                imageUrl={comic.imageUrl}
+                year={comic.year}
+              />
+            ))}
+          </ul>
+        </motion.div>
+      </section>
     )
   }
 }

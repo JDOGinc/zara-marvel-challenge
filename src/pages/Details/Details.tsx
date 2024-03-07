@@ -26,14 +26,8 @@ function Details() {
       <>
         {isLoading && <LoadBar />}
         {!isLoading && <DetailsInfoCard character={character} />}
-        <section className="character-comics">
-          <div className="comics-content">
-            <ComicSlider
-              id={character.id.toString()}
-              setIsLoading={setIsLoading}
-            ></ComicSlider>
-          </div>
-        </section>
+
+        <ComicSlider id={character.id.toString()} setIsLoading={setIsLoading} />
       </>
     )
   }
