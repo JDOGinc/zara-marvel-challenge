@@ -30,3 +30,8 @@ header img {
     letter-spacing: 0em;
     text-align: left;
 }
+
+.loading-bar {
+    background-color: var(--marvel-red);
+    height: 5.38px;
+}
